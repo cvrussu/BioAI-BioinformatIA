@@ -11,7 +11,9 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({ detail: "Error desconocido" }));
-    throw new Error(error.detail || `Error ${res.status}`);
+    const detail = error.detail;
+    const msg = typeof detail === "string" ? detail : JSON.stringify(detail);
+    throw new Error(msg || `Error ${res.status}`);
   }
 
   return res.json();
@@ -33,11 +35,15 @@ export interface AlphaFoldResult {
 }
 
 export interface SequenceAnalysis {
+  sequence: string;
   length: number;
   molecular_weight: number;
   isoelectric_point: number;
-  amino_acid_composition: Record<string, number>;
-  average_hydrophobicity: number;
+  gravy: number;
+  aromaticity?: number;
+  instability_index?: number;
+  composition?: Record<string, number>;
+  message?: string;
 }
 
 export interface AIInterpretation {
@@ -63,7 +69,7 @@ export async function lookupAlphaFold(
 export async function analyzeSequence(
   sequence: string
 ): Promise<SequenceAnalysis> {
-  return request<SequenceAnalysis>("/sequence/analyze", {
+  return request<SequenceAnalysis>("/analysis/sequence", {
     method: "POST",
     body: JSON.stringify({ sequence }),
   });
@@ -73,9 +79,16 @@ export async function interpretResults(
   results: string,
   industry: string
 ): Promise<AIInterpretation> {
+  // Backend expects `results` as an object — try JSON parse, fallback to text wrapper
+  let resultsObj: Record<string, unknown>;
+  try {
+    resultsObj = JSON.parse(results);
+  } catch {
+    resultsObj = { raw_text: results };
+  }
   return request<AIInterpretation>("/interpret", {
     method: "POST",
-    body: JSON.stringify({ results, industry }),
+    body: JSON.stringify({ results: resultsObj, industry }),
   });
 }
 

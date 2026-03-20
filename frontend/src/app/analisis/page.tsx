@@ -94,14 +94,14 @@ export default function AnalisisPage() {
                 <ResultCard title="Longitud" value={results.length} />
                 <ResultCard title="Peso Molecular" value={`${results.molecular_weight.toFixed(1)} Da`} />
                 <ResultCard title="Punto Isoelectrico" value={results.isoelectric_point.toFixed(2)} />
-                <ResultCard title="Hidrofobicidad" value={results.average_hydrophobicity.toFixed(3)} />
+                <ResultCard title="Hidrofobicidad" value={results.gravy.toFixed(3)} />
               </div>
 
               <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-sm">
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted/70">
                   Composicion de Aminoacidos
                 </h3>
-                <AminoAcidChart composition={results.amino_acid_composition} />
+                <AminoAcidChart composition={results.composition ?? {}} />
               </div>
 
               <button
@@ -111,8 +111,8 @@ export default function AnalisisPage() {
                     length: results.length,
                     molecular_weight: results.molecular_weight,
                     isoelectric_point: results.isoelectric_point,
-                    gravy: results.average_hydrophobicity,
-                    composition: results.amino_acid_composition,
+                    gravy: results.gravy,
+                    composition: results.composition,
                   })
                 }
                 className="inline-flex items-center gap-2 rounded-xl border border-teal/30 bg-teal/5 px-5 py-2.5 text-sm font-medium text-teal-dark shadow-sm transition-all hover:bg-teal/10 hover:shadow-md"
