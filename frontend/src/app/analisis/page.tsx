@@ -101,7 +101,7 @@ export default function AnalisisPage() {
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted/70">
                   Composicion de Aminoacidos
                 </h3>
-                <AminoAcidChart composition={results.composition ?? {}} />
+                <AminoAcidChart composition={results.composition?.percentages ?? {}} />
               </div>
 
               <button

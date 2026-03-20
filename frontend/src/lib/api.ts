@@ -42,7 +42,7 @@ export interface SequenceAnalysis {
   gravy: number;
   aromaticity?: number;
   instability_index?: number;
-  composition?: Record<string, number>;
+  composition?: { counts: Record<string, number>; percentages: Record<string, number> };
   message?: string;
 }
 
@@ -148,7 +148,7 @@ export async function downloadAnalysisPdf(data: {
   gravy: number;
   aromaticity?: number;
   instability_index?: number;
-  composition?: Record<string, number>;
+  composition?: { counts: Record<string, number>; percentages: Record<string, number> };
 }) {
   await downloadBlob("/reports/analysis/pdf", data, "bioai_analisis.pdf");
 }
