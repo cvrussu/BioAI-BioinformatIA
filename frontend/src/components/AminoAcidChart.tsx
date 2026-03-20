@@ -53,9 +53,9 @@ export default function AminoAcidChart({ composition }: AminoAcidChartProps) {
               />
             </div>
             <span className="w-12 text-right font-mono text-xs text-muted">
-              {typeof count === "number" && count % 1 !== 0
-                ? `${(count * 100).toFixed(1)}%`
-                : count}
+              {typeof count === "number"
+                ? count === 0 ? "0%" : `${count.toFixed(1)}%`
+                : String(count)}
             </span>
           </div>
         );
