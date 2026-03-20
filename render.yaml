@@ -12,6 +12,6 @@ services:
       - key: ANTHROPIC_API_KEY
         sync: false
       - key: CORS_ORIGINS
-        sync: false
+        value: https://frontend-cvrussus-projects.vercel.app
       - key: LOG_LEVEL
         value: info
