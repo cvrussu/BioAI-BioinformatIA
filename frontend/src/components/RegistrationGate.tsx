@@ -31,7 +31,7 @@ export interface UserData {
 }
 
 interface RegistrationGateProps {
-  onRegistered: (user: UserData) => void;
+  onRegistered: () => void;
 }
 
 export default function RegistrationGate({ onRegistered }: RegistrationGateProps) {
@@ -78,7 +78,7 @@ export default function RegistrationGate({ onRegistered }: RegistrationGateProps
         console.warn("No se pudo conectar con el backend para registrar usuario.");
       }
 
-      onRegistered(userData);
+      onRegistered();
     } catch {
       setError("Ocurrio un error. Intenta de nuevo.");
       setSubmitting(false);

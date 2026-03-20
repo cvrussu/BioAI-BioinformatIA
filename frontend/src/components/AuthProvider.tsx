@@ -3,7 +3,6 @@
 import {
   createContext,
   useContext,
-  useState,
   useCallback,
   useSyncExternalStore,
   type ReactNode,
@@ -24,34 +23,54 @@ export function useUser() {
   return useContext(AuthContext);
 }
 
+let snapshotCache: { raw: string | null; parsed: UserData | null } = {
+  raw: null,
+  parsed: null,
+};
+
 function getStoredUser(): UserData | null {
   if (typeof window === "undefined") return null;
   try {
-    const stored = localStorage.getItem("bioai_user");
-    if (stored) return JSON.parse(stored);
+    const raw = localStorage.getItem("bioai_user");
+    if (raw !== snapshotCache.raw) {
+      snapshotCache = { raw, parsed: raw ? JSON.parse(raw) : null };
+    }
+    return snapshotCache.parsed;
   } catch {
     localStorage.removeItem("bioai_user");
+    snapshotCache = { raw: null, parsed: null };
   }
   return null;
 }
 
+const listeners = new Set<() => void>();
+
+function emitChange() {
+  for (const listener of listeners) listener();
+}
+
 function subscribe(callback: () => void) {
+  listeners.add(callback);
   window.addEventListener("storage", callback);
-  return () => window.removeEventListener("storage", callback);
+  return () => {
+    listeners.delete(callback);
+    window.removeEventListener("storage", callback);
+  };
 }
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
-  const storedUser = useSyncExternalStore(subscribe, getStoredUser, () => null);
-  const [user, setUser] = useState<UserData | null>(storedUser);
+  const user = useSyncExternalStore(subscribe, getStoredUser, () => null);
 
-  const handleRegistered = useCallback((userData: UserData) => {
-    setUser(userData);
+  const handleRegistered = useCallback(() => {
+    // localStorage already written by RegistrationGate — just notify React
+    snapshotCache = { raw: null, parsed: null };
+    emitChange();
   }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem("bioai_user");
-    setUser(null);
-    window.location.reload();
+    snapshotCache = { raw: null, parsed: null };
+    emitChange();
   }, []);
 
   if (!user) {
