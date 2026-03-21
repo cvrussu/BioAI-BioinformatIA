@@ -152,17 +152,12 @@ export default function EstructuraPage() {
               {prediction && (
                 <div className="space-y-5">
                   <div className="grid gap-4 sm:grid-cols-2">
-                    {prediction.plddt_score !== undefined && (
-                      <ResultCard title="Puntuacion pLDDT" value={prediction.plddt_score.toFixed(1)} />
-                    )}
-                    {prediction.sequence_length !== undefined && (
-                      <ResultCard title="Longitud" value={prediction.sequence_length} />
-                    )}
+                    <ResultCard title="Longitud" value={prediction.length} />
                   </div>
-                  <MolstarViewer pdbData={prediction.pdb_data} />
+                  <MolstarViewer pdbData={prediction.pdb_content} />
                   <div className="flex flex-wrap gap-3">
                     <button
-                      onClick={() => downloadPdb(prediction.pdb_data, "prediccion_esmfold.pdb")}
+                      onClick={() => downloadPdb(prediction.pdb_content, "prediccion_esmfold.pdb")}
                       className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-white px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-gray-50 hover:shadow-md"
                     >
                       <Download size={16} aria-hidden="true" />
@@ -172,9 +167,8 @@ export default function EstructuraPage() {
                       onClick={() =>
                         downloadStructurePdf({
                           sequence: sequence.replace(/\s/g, ""),
-                          length: prediction.sequence_length ?? sequence.replace(/\s/g, "").length,
-                          pdb_content: prediction.pdb_data,
-                          confidence: prediction.plddt_score,
+                          length: prediction.length,
+                          pdb_content: prediction.pdb_content,
                           source: "ESMFold",
                         })
                       }
@@ -233,30 +227,34 @@ export default function EstructuraPage() {
                 <div className="space-y-5">
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     <ResultCard title="UniProt ID" value={alphaResult.uniprot_id} />
-                    {alphaResult.protein_name && <ResultCard title="Proteina" value={alphaResult.protein_name} />}
                     {alphaResult.organism && <ResultCard title="Organismo" value={alphaResult.organism} />}
-                    {alphaResult.gene_name && <ResultCard title="Gen" value={alphaResult.gene_name} />}
+                    {alphaResult.gene && <ResultCard title="Gen" value={alphaResult.gene} />}
+                    {alphaResult.confidence_avg !== undefined && alphaResult.confidence_avg !== null && (
+                      <ResultCard title="Confianza" value={alphaResult.confidence_avg.toFixed(1)} />
+                    )}
                   </div>
-                  {alphaResult.pdb_data && <MolstarViewer pdbData={alphaResult.pdb_data} />}
+                  {alphaResult.pdb_content && <MolstarViewer pdbData={alphaResult.pdb_content} />}
                   <div className="flex flex-wrap gap-3">
-                    <a
-                      href={alphaResult.pdb_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-white px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-gray-50 hover:shadow-md"
-                    >
-                      <Download size={16} aria-hidden="true" />
-                      Descargar desde AlphaFold DB
-                    </a>
-                    {alphaResult.pdb_data && (
+                    {alphaResult.pdb_url && (
+                      <a
+                        href={alphaResult.pdb_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-white px-5 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-gray-50 hover:shadow-md"
+                      >
+                        <Download size={16} aria-hidden="true" />
+                        Descargar desde AlphaFold DB
+                      </a>
+                    )}
+                    {alphaResult.pdb_content && (
                       <button
                         onClick={() =>
                           downloadStructurePdf({
                             sequence: "",
-                            length: alphaResult.pdb_data!.split("\n").length,
-                            pdb_content: alphaResult.pdb_data!,
+                            length: alphaResult.pdb_content!.split("\n").length,
+                            pdb_content: alphaResult.pdb_content!,
                             uniprot_id: alphaResult.uniprot_id,
-                            gene: alphaResult.gene_name ?? undefined,
+                            gene: alphaResult.gene ?? undefined,
                             organism: alphaResult.organism ?? undefined,
                             source: "AlphaFold DB",
                           })

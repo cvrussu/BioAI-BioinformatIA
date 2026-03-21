@@ -20,18 +20,21 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
 }
 
 export interface StructurePrediction {
-  pdb_data: string;
-  plddt_score?: number;
-  sequence_length?: number;
+  sequence: string;
+  length: number;
+  pdb_content: string;
+  message?: string;
 }
 
 export interface AlphaFoldResult {
-  pdb_url: string;
-  pdb_data?: string;
   uniprot_id: string;
+  gene?: string;
   organism?: string;
-  protein_name?: string;
-  gene_name?: string;
+  pdb_url?: string;
+  cif_url?: string;
+  pae_image_url?: string;
+  confidence_avg?: number;
+  pdb_content?: string;
 }
 
 export interface SequenceAnalysis {
