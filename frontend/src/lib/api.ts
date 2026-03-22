@@ -107,6 +107,240 @@ export async function registerUser(userData: {
   });
 }
 
+// ── BLAST ─────────────────────────────────────────────────────────────
+
+export interface BlastHit {
+  title: string;
+  accession: string;
+  length: number;
+  e_value: number;
+  score: number;
+  identity_pct?: number;
+  query_cover?: string;
+}
+
+export interface BlastResult {
+  program: string;
+  database: string;
+  hits: BlastHit[];
+  total_hits: number;
+}
+
+export async function blastSearch(params: {
+  sequence: string;
+  program?: string;
+  database?: string;
+  evalue?: number;
+  max_hits?: number;
+}): Promise<BlastResult> {
+  return request<BlastResult>("/analysis/blast-search", {
+    method: "POST",
+    body: JSON.stringify({
+      sequence: params.sequence,
+      program: params.program || "blastp",
+      database: params.database || "nr",
+      evalue: params.evalue || 0.01,
+      max_hits: params.max_hits || 10,
+    }),
+  });
+}
+
+// ── KEGG ──────────────────────────────────────────────────────────────
+
+export interface KEGGEntry {
+  id: string;
+  description: string;
+}
+
+export interface KEGGSearchResult {
+  query: string;
+  category: string;
+  results: KEGGEntry[];
+  total: number;
+}
+
+export interface KEGGPathway {
+  id: string;
+  name?: string;
+  definition?: string;
+  class?: string;
+  organism?: string;
+  image_url?: string;
+  raw?: string;
+}
+
+export async function searchKEGG(
+  query: string,
+  category: string = "pathway"
+): Promise<KEGGSearchResult> {
+  return request<KEGGSearchResult>(
+    `/kegg/search?q=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`
+  );
+}
+
+export async function getKEGGPathway(
+  pathwayId: string
+): Promise<KEGGPathway> {
+  return request<KEGGPathway>(`/kegg/pathway/${encodeURIComponent(pathwayId)}`);
+}
+
+// ── ClinVar ───────────────────────────────────────────────────────────
+
+export interface ClinVarEntry {
+  uid: string;
+  title: string;
+  gene: string;
+  clinical_significance: string;
+  condition: string;
+  review_status: string;
+  variation_type: string;
+  accession: string;
+  url: string;
+}
+
+export interface ClinVarResult {
+  query: string;
+  results: ClinVarEntry[];
+  total: number;
+}
+
+export async function searchClinVar(query: string): Promise<ClinVarResult> {
+  return request<ClinVarResult>(
+    `/databases/clinvar/search?q=${encodeURIComponent(query)}`
+  );
+}
+
+// ── OMIM ──────────────────────────────────────────────────────────────
+
+export interface OMIMEntry {
+  uid: string;
+  title: string;
+  mim_number: string;
+  url: string;
+}
+
+export interface OMIMResult {
+  query: string;
+  results: OMIMEntry[];
+  total: number;
+}
+
+export async function searchOMIM(query: string): Promise<OMIMResult> {
+  return request<OMIMResult>(
+    `/databases/omim/search?q=${encodeURIComponent(query)}`
+  );
+}
+
+// ── OpenTargets ───────────────────────────────────────────────────────
+
+export interface OpenTargetsEntry {
+  id: string;
+  name: string;
+  symbol: string;
+  description: string;
+  biotype: string;
+  url: string;
+}
+
+export interface OpenTargetsSearchResult {
+  query: string;
+  results: OpenTargetsEntry[];
+  total: number;
+}
+
+export interface OpenTargetsAssociation {
+  disease_id: string;
+  disease_name: string;
+  score: number;
+  url: string;
+}
+
+export interface OpenTargetsAssociationsResult {
+  target_id: string;
+  associations: OpenTargetsAssociation[];
+  total: number;
+}
+
+export async function searchOpenTargets(
+  query: string
+): Promise<OpenTargetsSearchResult> {
+  return request<OpenTargetsSearchResult>(
+    `/databases/opentargets/search?q=${encodeURIComponent(query)}`
+  );
+}
+
+export async function getOpenTargetsAssociations(
+  targetId: string
+): Promise<OpenTargetsAssociationsResult> {
+  return request<OpenTargetsAssociationsResult>(
+    `/databases/opentargets/${encodeURIComponent(targetId)}/associations`
+  );
+}
+
+// ── ChEMBL / Drugs ───────────────────────────────────────────────────
+
+export interface DrugEntry {
+  chembl_id: string;
+  name: string;
+  molecule_type: string;
+  max_phase: number;
+  first_approval?: number;
+  oral: boolean;
+  molecular_weight?: string;
+  alogp?: string;
+  hba?: number;
+  hbd?: number;
+  url: string;
+}
+
+export interface DrugSearchResult {
+  query: string;
+  results: DrugEntry[];
+  total: number;
+}
+
+export async function searchDrugs(query: string): Promise<DrugSearchResult> {
+  return request<DrugSearchResult>(
+    `/databases/drugs/search?q=${encodeURIComponent(query)}`
+  );
+}
+
+// ── Primer Design ────────────────────────────────────────────────────
+
+export interface PrimerPair {
+  pair_index: number;
+  forward_sequence: string;
+  reverse_sequence: string;
+  forward_tm: number;
+  reverse_tm: number;
+  forward_gc_pct: number;
+  reverse_gc_pct: number;
+  product_size: number;
+  penalty: number;
+}
+
+export interface PrimerDesignResult {
+  sequence_length: number;
+  target_start: number;
+  target_length: number;
+  num_returned: number;
+  primers: PrimerPair[];
+}
+
+export async function designPrimers(params: {
+  sequence: string;
+  target_start?: number;
+  target_length?: number;
+  num_return?: number;
+  opt_size?: number;
+  opt_tm?: number;
+}): Promise<PrimerDesignResult> {
+  return request<PrimerDesignResult>("/analysis/primer-design", {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
+}
+
 // ── Report Downloads ──────────────────────────────────────────────────
 
 async function downloadBlob(endpoint: string, body: unknown, fallbackName: string) {

@@ -12,10 +12,12 @@ from app.models.schemas import (
     AminoAcidComposition,
     BlastRequest,
     BlastResponse,
+    PrimerDesignRequest,
     SequenceAnalysisRequest,
     SequenceAnalysisResponse,
 )
 from app.services import sequence as seq_service
+from app.services import primer_design
 
 logger = logging.getLogger(__name__)
 
@@ -87,3 +89,35 @@ async def blast_search(body: BlastRequest):
         )
 
     return BlastResponse(**result)
+
+
+@router.post(
+    "/primer-design",
+    summary="Diseño de primers PCR",
+    description=(
+        "Diseña primers PCR usando Primer3 para una secuencia de ADN dada. "
+        "Retorna hasta 5 pares de primers con Tm, GC% y tamaño del producto."
+    ),
+)
+async def design_primers_endpoint(body: PrimerDesignRequest):
+    try:
+        loop = asyncio.get_running_loop()
+        result = await loop.run_in_executor(
+            None,
+            partial(
+                primer_design.design_primers,
+                sequence=body.sequence,
+                target_start=body.target_start,
+                target_length=body.target_length,
+                num_return=body.num_return,
+                opt_size=body.opt_size,
+                opt_tm=body.opt_tm,
+            ),
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    except Exception as exc:
+        logger.exception("Primer design error")
+        raise HTTPException(status_code=502, detail=f"Error en diseño de primers: {exc}")
+
+    return result

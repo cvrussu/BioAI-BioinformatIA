@@ -14,13 +14,21 @@ import {
   ChevronRight,
   LogOut,
   User,
+  Search,
+  Scissors,
+  Route,
+  Database,
 } from "lucide-react";
 import { useUser } from "./AuthProvider";
 
 const NAV_ITEMS = [
   { href: "/", label: "Inicio", icon: Home },
-  { href: "/estructura", label: "Estructura", icon: Box },
+  { href: "/estructura", label: "Estructura 3D", icon: Box },
   { href: "/analisis", label: "Analisis", icon: BarChart3 },
+  { href: "/blast", label: "BLAST", icon: Search },
+  { href: "/primers", label: "Primers", icon: Scissors },
+  { href: "/kegg", label: "KEGG Pathways", icon: Route },
+  { href: "/databases", label: "Bases de Datos", icon: Database },
   { href: "/interpretacion", label: "Interpretacion IA", icon: BrainCircuit },
 ];
 

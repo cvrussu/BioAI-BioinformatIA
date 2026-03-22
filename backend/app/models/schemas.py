@@ -160,6 +160,26 @@ class BlastResponse(BaseModel):
     message: str = "Búsqueda BLAST completada exitosamente."
 
 
+class PrimerDesignRequest(BaseModel):
+    sequence: str = Field(..., min_length=20, description="Secuencia de ADN template.")
+    target_start: int = Field(default=0, ge=0, description="Posicion de inicio del target.")
+    target_length: int = Field(default=0, ge=0, description="Longitud de la region target.")
+    num_return: int = Field(default=5, ge=1, le=10, description="Numero de pares a retornar.")
+    opt_size: int = Field(default=20, ge=15, le=30, description="Tamaño optimo del primer.")
+    opt_tm: float = Field(default=60.0, ge=50.0, le=72.0, description="Tm optimo.")
+
+    @field_validator("sequence")
+    @classmethod
+    def clean_dna(cls, v: str) -> str:
+        v = re.sub(r"\s+", "", v.strip().upper())
+        invalid = set(v) - set("ACGT")
+        if invalid:
+            raise ValueError(
+                f"Caracteres no validos para ADN: {', '.join(sorted(invalid))}."
+            )
+        return v
+
+
 # ---------------------------------------------------------------------------
 # Interpretation endpoint
 # ---------------------------------------------------------------------------
