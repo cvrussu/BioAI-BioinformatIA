@@ -21,13 +21,21 @@ export default function ResultCard({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`rounded-xl border border-border/60 bg-card p-5 shadow-sm transition-shadow hover:shadow-md ${className}`}
+      className={`card-hover rounded-xl p-5 bg-white ${className}`}
     >
-      <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-muted/70">
+      <h3
+        className="mb-1.5 text-xs font-semibold uppercase tracking-wider"
+        style={{ color: "#0891B2" }}
+      >
         {title}
       </h3>
       {value !== undefined && (
-        <p className="text-2xl font-bold tracking-tight text-foreground">{value}</p>
+        <p
+          className="text-2xl font-bold tracking-tight"
+          style={{ color: "#0F172A" }}
+        >
+          {value}
+        </p>
       )}
       {children}
     </motion.div>

@@ -29,13 +29,23 @@ export default function RootLayout({
     <html
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      style={{ background: "#F6F9FF" }}
     >
-      <body className="flex min-h-full bg-background text-foreground">
+      <body
+        className="flex min-h-full"
+        style={{ background: "#F6F9FF", color: "#0F172A" }}
+      >
         <AuthProvider>
           <Sidebar />
           <div className="flex flex-1 flex-col pt-14 md:ml-64 md:pt-0">
             <main className="flex-1 px-4 py-8 sm:px-8 lg:px-12">{children}</main>
-            <footer className="border-t border-border/60 px-6 py-4 text-center text-xs text-muted/60">
+            <footer
+              className="px-6 py-4 text-center text-xs"
+              style={{
+                borderTop: "1px solid rgba(15,23,42,0.07)",
+                color: "rgba(100,116,139,0.6)",
+              }}
+            >
               BioAI &mdash; ScienSolutions SpA &mdash; Santiago, Chile
             </footer>
           </div>

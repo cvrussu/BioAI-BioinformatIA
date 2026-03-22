@@ -40,16 +40,31 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile header */}
-      <div className="fixed top-0 left-0 right-0 z-50 flex h-14 items-center justify-between border-b border-white/5 bg-sidebar/95 px-4 backdrop-blur-md md:hidden">
-        <Link href="/" className="flex items-center gap-2 text-white">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal/20">
-            <Dna size={18} className="text-teal-light" />
+      <div
+        className="fixed top-0 left-0 right-0 z-50 flex h-14 items-center justify-between px-4 backdrop-blur-md md:hidden"
+        style={{
+          background: "rgba(255,255,255,0.92)",
+          borderBottom: "1px solid rgba(15,23,42,0.08)",
+        }}
+      >
+        <Link href="/" className="flex items-center gap-2">
+          <div
+            className="flex h-8 w-8 items-center justify-center rounded-lg"
+            style={{
+              background: "linear-gradient(135deg, #0891B2, #22D3EE)",
+              boxShadow: "0 2px 8px rgba(8,145,178,0.3)",
+            }}
+          >
+            <Dna size={17} style={{ color: "#FFFFFF" }} />
           </div>
-          <span className="text-lg font-bold tracking-tight">BioAI</span>
+          <span className="text-lg font-bold tracking-tight" style={{ color: "#0F172A" }}>
+            BioAI
+          </span>
         </Link>
         <button
           onClick={() => setOpen(!open)}
-          className="rounded-lg p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+          className="rounded-lg p-2 transition-colors"
+          style={{ color: "#64748B" }}
           aria-label={open ? "Cerrar menu" : "Abrir menu"}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
@@ -59,7 +74,8 @@ export default function Sidebar() {
       {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 backdrop-blur-sm md:hidden"
+          style={{ background: "rgba(15,23,42,0.25)" }}
           onClick={() => setOpen(false)}
           aria-hidden="true"
         />
@@ -67,59 +83,101 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 z-50 flex h-full w-64 flex-col bg-sidebar text-white transition-transform duration-300 ease-out md:translate-x-0 ${
+        className={`fixed top-0 left-0 z-50 flex h-full w-64 flex-col transition-transform duration-300 ease-out md:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
+        style={{
+          background: "#FFFFFF",
+          borderRight: "1px solid rgba(15,23,42,0.07)",
+          boxShadow: "4px 0 24px rgba(15,23,42,0.04)",
+        }}
         aria-label="Navegacion principal"
       >
         {/* Logo */}
         <div className="flex h-16 items-center gap-3 px-5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal to-teal-dark shadow-lg shadow-teal/20">
-            <Dna size={20} className="text-white" />
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-xl"
+            style={{
+              background: "linear-gradient(135deg, #0891B2, #22D3EE)",
+              boxShadow: "0 4px 12px rgba(8,145,178,0.28)",
+            }}
+          >
+            <Dna size={19} style={{ color: "#FFFFFF" }} />
           </div>
           <div>
-            <span className="text-lg font-bold tracking-tight">BioAI</span>
-            <p className="text-[10px] font-medium uppercase tracking-widest text-white/40">
+            <span className="text-lg font-bold tracking-tight" style={{ color: "#0F172A" }}>
+              BioAI
+            </span>
+            <p
+              className="text-[10px] font-semibold uppercase tracking-widest"
+              style={{ color: "#0891B2" }}
+            >
               Bioinformatica
             </p>
           </div>
         </div>
 
         {/* Divider */}
-        <div className="mx-4 border-t border-white/[0.06]" />
+        <div
+          className="mx-4 border-t"
+          style={{ borderColor: "rgba(15,23,42,0.06)" }}
+        />
 
         {/* Navigation */}
         <nav className="flex-1 space-y-0.5 px-3 py-4">
-          <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-white/30">
+          <p
+            className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest"
+            style={{ color: "rgba(100,116,139,0.55)" }}
+          >
             Herramientas
           </p>
-          {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+          {NAV_ITEMS.map((navItem) => {
+            const isActive = pathname === navItem.href;
+            const Icon = navItem.icon;
             return (
               <Link
-                key={item.href}
-                href={item.href}
+                key={navItem.href}
+                href={navItem.href}
                 onClick={() => setOpen(false)}
-                className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
-                  isActive
-                    ? "bg-white/10 text-white shadow-sm"
-                    : "text-white/50 hover:bg-white/[0.06] hover:text-white/90"
-                }`}
+                className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition-all duration-200"
+                style={{
+                  background: isActive ? "rgba(8,145,178,0.08)" : "transparent",
+                  color: isActive ? "#0891B2" : "#475569",
+                  boxShadow: isActive ? "inset 2px 0 0 #0891B2" : "none",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    (e.currentTarget as HTMLAnchorElement).style.background =
+                      "rgba(15,23,42,0.04)";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#0F172A";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
+                    (e.currentTarget as HTMLAnchorElement).style.color = "#475569";
+                  }
+                }}
                 aria-current={isActive ? "page" : undefined}
               >
                 <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
-                    isActive
-                      ? "bg-teal/20 text-teal-light"
-                      : "bg-white/[0.04] text-white/40 group-hover:bg-white/[0.08] group-hover:text-white/70"
-                  }`}
+                  className="flex h-7 w-7 items-center justify-center rounded-lg transition-colors"
+                  style={{
+                    background: isActive
+                      ? "rgba(8,145,178,0.12)"
+                      : "rgba(15,23,42,0.05)",
+                    color: isActive ? "#0891B2" : "#94A3B8",
+                  }}
                 >
-                  <Icon size={16} aria-hidden="true" />
+                  <Icon size={15} aria-hidden="true" />
                 </div>
-                <span className="flex-1">{item.label}</span>
+                <span className="flex-1">{navItem.label}</span>
                 {isActive && (
-                  <ChevronRight size={14} className="text-white/30" aria-hidden="true" />
+                  <ChevronRight
+                    size={13}
+                    style={{ color: "rgba(8,145,178,0.5)" }}
+                    aria-hidden="true"
+                  />
                 )}
               </Link>
             );
@@ -127,36 +185,64 @@ export default function Sidebar() {
         </nav>
 
         {/* User info & Footer */}
-        <div className="border-t border-white/[0.06] px-5 py-4 space-y-3">
+        <div
+          className="border-t px-4 py-4 space-y-2.5"
+          style={{ borderColor: "rgba(15,23,42,0.06)" }}
+        >
           {user && (
-            <div className="rounded-lg bg-white/[0.04] px-3 py-2.5">
+            <div
+              className="rounded-xl px-3 py-2.5"
+              style={{
+                background: "rgba(248,250,255,0.9)",
+                border: "1px solid rgba(15,23,42,0.07)",
+              }}
+            >
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-teal/20">
-                  <User size={14} className="text-teal-light" />
+                <div
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+                  style={{ background: "rgba(8,145,178,0.10)" }}
+                >
+                  <User size={13} style={{ color: "#0891B2" }} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[11px] font-medium text-white/70">
+                  <p
+                    className="truncate text-[11px] font-semibold"
+                    style={{ color: "#0F172A" }}
+                  >
                     {user.name}
                   </p>
-                  <p className="truncate text-[10px] text-white/35">
+                  <p className="truncate text-[10px]" style={{ color: "#94A3B8" }}>
                     {user.organization}
                   </p>
                 </div>
               </div>
               <button
                 onClick={logout}
-                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-md bg-white/[0.04] px-2 py-1.5 text-[10px] font-medium text-white/40 transition-colors hover:bg-white/[0.08] hover:text-white/60"
+                className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-[10px] font-medium transition-colors"
+                style={{
+                  background: "rgba(15,23,42,0.04)",
+                  color: "#94A3B8",
+                  border: "1px solid rgba(15,23,42,0.06)",
+                }}
               >
-                <LogOut size={12} />
+                <LogOut size={11} />
                 Cerrar sesion
               </button>
             </div>
           )}
-          <div className="rounded-lg bg-white/[0.04] px-3 py-2.5">
-            <p className="text-[11px] font-medium text-white/50">
+          <div
+            className="rounded-xl px-3 py-2.5"
+            style={{
+              background: "linear-gradient(135deg, rgba(8,145,178,0.05) 0%, rgba(124,58,237,0.04) 100%)",
+              border: "1px solid rgba(8,145,178,0.10)",
+            }}
+          >
+            <p className="text-[11px] font-semibold" style={{ color: "#0F172A" }}>
               ScienSolutions SpA
             </p>
-            <p className="text-[10px] text-white/25">Santiago, Chile</p>
+            <p className="text-[10px]" style={{ color: "#94A3B8" }}>
+              Santiago, Chile
+            </p>
           </div>
         </div>
       </aside>

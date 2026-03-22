@@ -20,6 +20,7 @@ import {
   GraduationCap,
   FlaskConical,
 } from "lucide-react";
+import AnimateOnScroll from "@/components/AnimateOnScroll";
 
 const FEATURES = [
   {
@@ -28,10 +29,9 @@ const FEATURES = [
       "Predice la estructura 3D de proteinas con ESMFold o busca en AlphaFold DB. Visualiza resultados interactivamente con Mol*.",
     icon: Box,
     href: "/estructura",
-    gradient: "from-blue-500/10 via-blue-500/5 to-transparent",
-    iconBg: "bg-blue-500/10",
-    iconColor: "text-blue-600",
-    borderHover: "hover:border-blue-200",
+    iconBg: "rgba(59, 130, 246, 0.10)",
+    iconColor: "#3B82F6",
+    borderHover: "rgba(59,130,246,0.20)",
   },
   {
     title: "Analisis Fisicoquimico",
@@ -39,10 +39,9 @@ const FEATURES = [
       "Calcula peso molecular, punto isoelectrico, composicion de aminoacidos, hidrofobicidad GRAVY y mas propiedades de tus secuencias.",
     icon: BarChart3,
     href: "/analisis",
-    gradient: "from-teal/10 via-teal/5 to-transparent",
-    iconBg: "bg-teal/10",
-    iconColor: "text-teal-dark",
-    borderHover: "hover:border-teal-light/40",
+    iconBg: "rgba(8, 145, 178, 0.10)",
+    iconColor: "#0891B2",
+    borderHover: "rgba(8,145,178,0.20)",
   },
   {
     title: "Interpretacion con IA",
@@ -50,18 +49,17 @@ const FEATURES = [
       "Obtiene interpretaciones en espanol de tus resultados, contextualizadas para tu industria especifica (biotecnologia, farmaceutica, etc).",
     icon: BrainCircuit,
     href: "/interpretacion",
-    gradient: "from-accent/10 via-accent/5 to-transparent",
-    iconBg: "bg-accent/10",
-    iconColor: "text-accent",
-    borderHover: "hover:border-accent/30",
+    iconBg: "rgba(124, 58, 237, 0.10)",
+    iconColor: "#7C3AED",
+    borderHover: "rgba(124,58,237,0.20)",
   },
 ];
 
 const STATS = [
-  { icon: Zap, label: "Sin GPU requerida", desc: "Usa APIs en la nube" },
-  { icon: Globe, label: "Resultados en espanol", desc: "Interpretaciones claras" },
-  { icon: Shield, label: "100% local", desc: "Tus datos no salen" },
-  { icon: FileText, label: "Reportes PDF", desc: "Descarga tus resultados" },
+  { icon: Zap,      label: "Sin GPU requerida",      desc: "Usa APIs en la nube" },
+  { icon: Globe,    label: "Resultados en espanol",   desc: "Interpretaciones claras" },
+  { icon: Shield,   label: "100% local",              desc: "Tus datos no salen" },
+  { icon: FileText, label: "Reportes PDF",            desc: "Descarga tus resultados" },
 ];
 
 const USE_CASES = [
@@ -108,31 +106,37 @@ const CAPABILITIES = [
     icon: Box,
     title: "ESMFold",
     desc: "Prediccion de estructura 3D desde secuencia. No requiere alineamiento multiple — ideal para secuencias nuevas o no caracterizadas.",
+    color: "#3B82F6",
   },
   {
     icon: Download,
     title: "AlphaFold DB",
     desc: "Acceso directo a la base de datos de AlphaFold con mas de 200M de estructuras predichas. Busca por ID de UniProt.",
+    color: "#0891B2",
   },
   {
     icon: BarChart3,
     title: "Analisis de Secuencia",
     desc: "Peso molecular, pI, GRAVY, aromaticidad, indice de inestabilidad y composicion de aminoacidos completa.",
+    color: "#0891B2",
   },
   {
     icon: BrainCircuit,
     title: "IA en Espanol",
     desc: "Interpretacion contextualizada de resultados usando modelos de lenguaje avanzados, adaptada a tu industria.",
+    color: "#7C3AED",
   },
   {
     icon: FileText,
     title: "Reportes PDF",
     desc: "Genera reportes profesionales descargables con todos los resultados, tablas y datos de tu analisis.",
+    color: "#0E7490",
   },
   {
     icon: Dna,
     title: "Visualizacion 3D",
     desc: "Visualiza estructuras de proteinas de forma interactiva con el visor molecular Mol* directamente en el navegador.",
+    color: "#0891B2",
   },
 ];
 
@@ -152,68 +156,117 @@ const item = {
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-5xl">
-      {/* Hero */}
+
+      {/* ============================================================
+          HERO
+          ============================================================ */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative py-16 text-center lg:py-24"
+        transition={{ duration: 0.7 }}
+        className="relative py-16 text-center lg:py-24 overflow-hidden"
       >
-        <div className="absolute inset-0 -z-10 bg-grid opacity-50" />
-        <div className="absolute left-1/2 top-0 -z-10 h-[400px] w-[600px] -translate-x-1/2 rounded-full bg-gradient-to-b from-teal/8 via-accent/5 to-transparent blur-3xl" />
+        {/* Light mesh gradient background */}
+        <div className="hero-mesh rounded-3xl" />
 
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-teal/20 bg-teal/5 px-4 py-1.5 text-sm font-medium text-teal-dark">
+        {/* Hero image overlay — DNA illustration */}
+        <div className="hero-image-bg rounded-3xl" />
+
+        {/* Radial glow orbs */}
+        <div className="hero-glow" />
+
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1, duration: 0.4 }}
+          className="mb-7 badge-cyan"
+        >
           <Dna size={15} aria-hidden="true" />
           Plataforma de Bioinformatica con IA
-        </div>
+        </motion.div>
 
-        <h1 className="mb-5 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+        {/* Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="hero-title mb-5"
+          style={{ color: "#0F172A" }}
+        >
           Tu Bioinformatico
           <br />
           <span className="text-gradient">inteligente</span>
-        </h1>
+        </motion.h1>
 
-        <p className="mx-auto max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+          className="mx-auto max-w-xl text-base leading-relaxed sm:text-lg"
+          style={{ color: "#64748B" }}
+        >
           Analisis de proteinas, prediccion de estructuras e interpretacion
           de resultados con inteligencia artificial. Sin necesidad de experiencia en bioinformatica.
-        </p>
+        </motion.p>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="mt-9 flex flex-wrap items-center justify-center gap-4"
+        >
           <Link
             href="/estructura"
-            className="inline-flex items-center gap-2 rounded-xl bg-teal px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-teal-dark hover:shadow-md"
+            className="btn-cyan inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm shadow-lg"
           >
             Comenzar ahora
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
           <a
             href="#funcionalidades"
-            className="inline-flex items-center gap-2 rounded-xl border border-border/80 bg-white px-6 py-3 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-gray-50 hover:shadow-md"
+            className="btn-outline-dark inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-medium"
           >
             Ver funcionalidades
           </a>
-        </div>
+        </motion.div>
 
-        {/* Quick stats */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-6 sm:gap-10">
+        {/* Stats row */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.65, duration: 0.5 }}
+          className="mt-12 flex flex-wrap items-center justify-center gap-4 sm:gap-5"
+        >
           {STATS.map((stat) => {
             const Icon = stat.icon;
             return (
-              <div key={stat.label} className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-foreground/[0.04]">
-                  <Icon size={16} className="text-muted" aria-hidden="true" />
+              <div key={stat.label} className="stat-badge flex items-center gap-2.5">
+                <div
+                  className="flex h-8 w-8 items-center justify-center rounded-lg"
+                  style={{ background: "rgba(8,145,178,0.08)" }}
+                >
+                  <Icon size={15} style={{ color: "#0891B2" }} aria-hidden="true" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-foreground">{stat.label}</p>
-                  <p className="text-xs text-muted">{stat.desc}</p>
+                  <p className="text-[13px] font-semibold" style={{ color: "#0F172A" }}>
+                    {stat.label}
+                  </p>
+                  <p className="text-[11px]" style={{ color: "#94A3B8" }}>
+                    {stat.desc}
+                  </p>
                 </div>
               </div>
             );
           })}
-        </div>
+        </motion.div>
       </motion.section>
 
-      {/* Feature cards */}
+      {/* ============================================================
+          FEATURE CARDS (primary 3)
+          ============================================================ */}
       <motion.div
         variants={container}
         initial="hidden"
@@ -226,137 +279,183 @@ export default function HomePage() {
             <motion.div key={feature.href} variants={item}>
               <Link
                 href={feature.href}
-                className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${feature.borderHover}`}
+                className="feature-card-glow card-hover group relative flex h-full flex-col overflow-hidden rounded-2xl p-6 no-underline bg-white"
               >
+                {/* Icon */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
-                />
-                <div className="relative">
-                  <div
-                    className={`mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl ${feature.iconBg} transition-transform duration-300 group-hover:scale-110`}
-                  >
-                    <Icon size={22} className={feature.iconColor} aria-hidden="true" />
-                  </div>
-                  <h2 className="mb-2 text-[17px] font-semibold text-foreground">
-                    {feature.title}
-                  </h2>
-                  <p className="mb-5 text-sm leading-relaxed text-muted">
-                    {feature.description}
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-teal-dark transition-all duration-200 group-hover:gap-2.5">
-                    Comenzar
-                    <ArrowRight
-                      size={14}
-                      className="transition-transform duration-200 group-hover:translate-x-0.5"
-                      aria-hidden="true"
-                    />
-                  </span>
+                  className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                  style={{ background: feature.iconBg }}
+                >
+                  <Icon size={22} style={{ color: feature.iconColor }} aria-hidden="true" />
                 </div>
+
+                <h2
+                  className="mb-2 text-[17px] font-semibold"
+                  style={{ color: "#0F172A" }}
+                >
+                  {feature.title}
+                </h2>
+
+                <p
+                  className="mb-5 flex-1 text-sm leading-relaxed"
+                  style={{ color: "#64748B" }}
+                >
+                  {feature.description}
+                </p>
+
+                <span
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 group-hover:gap-2.5"
+                  style={{ color: feature.iconColor }}
+                >
+                  Comenzar
+                  <ArrowRight
+                    size={14}
+                    className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                </span>
               </Link>
             </motion.div>
           );
         })}
       </motion.div>
 
-      {/* Capabilities section */}
-      <motion.section
-        id="funcionalidades"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="pb-16"
-      >
-        <div className="mb-8 text-center">
-          <h2 className="mb-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+      {/* Section divider */}
+      <div className="section-divider mb-16" />
+
+      {/* ============================================================
+          CAPABILITIES SECTION
+          ============================================================ */}
+      <section id="funcionalidades" className="pb-16">
+        <AnimateOnScroll className="mb-10 text-center">
+          <h2 className="section-title mb-3" style={{ color: "#0F172A" }}>
             Que puedes hacer con BioAI
           </h2>
-          <p className="mx-auto max-w-lg text-sm text-muted">
+          <p className="mx-auto max-w-lg text-sm" style={{ color: "#64748B" }}>
             Herramientas de bioinformatica de nivel profesional, accesibles desde tu navegador.
           </p>
-        </div>
+        </AnimateOnScroll>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {CAPABILITIES.map((cap) => {
+          {CAPABILITIES.map((cap, i) => {
             const Icon = cap.icon;
+            const delay = (Math.min(i, 5) + 1) as 1 | 2 | 3 | 4 | 5 | 6;
             return (
-              <div
-                key={cap.title}
-                className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm"
-              >
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-teal/8">
-                  <Icon size={20} className="text-teal-dark" aria-hidden="true" />
+              <AnimateOnScroll key={cap.title} delay={delay}>
+                <div className="card-hover h-full rounded-2xl p-5 bg-white">
+                  <div
+                    className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl"
+                    style={{ background: `${cap.color}14` }}
+                  >
+                    <Icon size={20} style={{ color: cap.color }} aria-hidden="true" />
+                  </div>
+                  <h3
+                    className="mb-1.5 text-sm font-semibold"
+                    style={{ color: "#0F172A" }}
+                  >
+                    {cap.title}
+                  </h3>
+                  <p className="text-xs leading-relaxed" style={{ color: "#64748B" }}>
+                    {cap.desc}
+                  </p>
                 </div>
-                <h3 className="mb-1.5 text-sm font-semibold text-foreground">{cap.title}</h3>
-                <p className="text-xs leading-relaxed text-muted">{cap.desc}</p>
-              </div>
+              </AnimateOnScroll>
             );
           })}
         </div>
-      </motion.section>
+      </section>
 
-      {/* Use cases section */}
-      <motion.section
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="pb-20"
-      >
-        <div className="mb-8 text-center">
-          <h2 className="mb-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+      {/* Section divider */}
+      <div className="section-divider mb-16" />
+
+      {/* ============================================================
+          USE CASES SECTION
+          ============================================================ */}
+      <section className="pb-20">
+        <AnimateOnScroll className="mb-10 text-center">
+          <h2 className="section-title mb-3" style={{ color: "#0F172A" }}>
             Ejemplos de uso por industria
           </h2>
-          <p className="mx-auto max-w-lg text-sm text-muted">
+          <p className="mx-auto max-w-lg text-sm" style={{ color: "#64748B" }}>
             BioAI se adapta a tu contexto. Descubre como investigadores de distintas areas sacan el maximo provecho.
           </p>
-        </div>
+        </AnimateOnScroll>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {USE_CASES.map((uc) => {
+          {USE_CASES.map((uc, i) => {
             const Icon = uc.icon;
+            const delay = (Math.min(i, 5) + 1) as 1 | 2 | 3 | 4 | 5 | 6;
             return (
-              <div
-                key={uc.title}
-                className="group rounded-2xl border border-border/60 bg-card p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:border-teal/20"
-              >
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-primary/8">
-                    <Icon size={18} className="text-primary" aria-hidden="true" />
+              <AnimateOnScroll key={uc.title} delay={delay}>
+                <div className="card-hover h-full rounded-2xl p-5 bg-white">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div
+                      className="inline-flex h-9 w-9 items-center justify-center rounded-lg"
+                      style={{ background: "rgba(8,145,178,0.08)" }}
+                    >
+                      <Icon size={18} style={{ color: "#0891B2" }} aria-hidden="true" />
+                    </div>
+                    <h3 className="text-sm font-semibold" style={{ color: "#0F172A" }}>
+                      {uc.title}
+                    </h3>
                   </div>
-                  <h3 className="text-sm font-semibold text-foreground">{uc.title}</h3>
+                  <p className="text-xs leading-relaxed" style={{ color: "#64748B" }}>
+                    {uc.example}
+                  </p>
                 </div>
-                <p className="text-xs leading-relaxed text-muted">{uc.example}</p>
-              </div>
+              </AnimateOnScroll>
             );
           })}
         </div>
-      </motion.section>
+      </section>
 
-      {/* CTA */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-        className="pb-16 text-center"
-      >
-        <div className="rounded-2xl border border-teal/15 bg-gradient-to-br from-teal/5 via-transparent to-accent/5 p-10">
-          <h2 className="mb-3 text-xl font-bold text-foreground sm:text-2xl">
+      {/* ============================================================
+          CTA SECTION
+          ============================================================ */}
+      <AnimateOnScroll className="pb-16 text-center">
+        <div
+          className="relative overflow-hidden rounded-2xl p-10"
+          style={{
+            background: "linear-gradient(135deg, #EFF6FF 0%, #F5F3FF 50%, #ECFDF5 100%)",
+            border: "1px solid rgba(8,145,178,0.15)",
+          }}
+        >
+          {/* Decorative orbs */}
+          <div
+            className="pointer-events-none absolute left-0 top-0 -translate-x-1/3 -translate-y-1/3"
+            style={{
+              width: "280px",
+              height: "280px",
+              background: "radial-gradient(circle, rgba(8,145,178,0.12) 0%, transparent 70%)",
+              filter: "blur(40px)",
+            }}
+          />
+          <div
+            className="pointer-events-none absolute right-0 bottom-0 translate-x-1/3 translate-y-1/3"
+            style={{
+              width: "280px",
+              height: "280px",
+              background: "radial-gradient(circle, rgba(124,58,237,0.10) 0%, transparent 70%)",
+              filter: "blur(40px)",
+            }}
+          />
+
+          <h2 className="relative mb-3 text-xl font-bold sm:text-2xl" style={{ color: "#0F172A" }}>
             Listo para analizar tus proteinas?
           </h2>
-          <p className="mx-auto mb-6 max-w-md text-sm text-muted">
+          <p className="relative mx-auto mb-7 max-w-md text-sm" style={{ color: "#64748B" }}>
             Comienza prediciendo una estructura, analizando una secuencia o interpretando resultados con inteligencia artificial.
           </p>
           <Link
             href="/estructura"
-            className="inline-flex items-center gap-2 rounded-xl bg-teal px-6 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-teal-dark hover:shadow-md"
+            className="btn-cyan relative inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm"
           >
             Predecir mi primera estructura
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </div>
-      </motion.section>
+      </AnimateOnScroll>
+
     </div>
   );
 }
