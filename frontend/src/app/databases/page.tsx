@@ -7,7 +7,6 @@ import {
   Search,
   ExternalLink,
   Dna,
-  FlaskConical,
   Crosshair,
   Pill,
 } from "lucide-react";
