@@ -24,10 +24,6 @@ async def search_target(query: str, size: int = 10) -> list[dict]:
               name
               description
               entity
-              ... on Target {
-                approvedSymbol
-                biotype
-              }
             }
           }
         }
@@ -46,9 +42,9 @@ async def search_target(query: str, size: int = 10) -> list[dict]:
         results.append({
             "id": h.get("id", ""),
             "name": h.get("name", ""),
-            "symbol": h.get("approvedSymbol", ""),
+            "symbol": h.get("name", ""),
             "description": h.get("description", ""),
-            "biotype": h.get("biotype", ""),
+            "biotype": h.get("entity", ""),
             "url": f"https://platform.opentargets.org/target/{h.get('id', '')}",
         })
     return results
